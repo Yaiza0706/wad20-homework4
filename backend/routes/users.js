@@ -3,6 +3,7 @@ const router = express.Router();
 const authorize = require('../middlewares/authorize');
 const UserModel = require('../models/UserModel');
 const FollowModel = require('../models/FollowModel');
+const JWT = require('../library/jwt');
 
 // Public endpoints
 router.post('/', (request, response) => {
@@ -79,13 +80,16 @@ router.post('/login', (request, response) => {
             return;
         }
 
+        let payload = user;
+        console.log(payload)
+
         response.json({
             id: user.id,
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email,
             avatar: user.avatar,
-            accessToken: null // THis is the place where you should pass generated access token
+            accessToken: JWT.createAccessToken(payload) // THis is the place where you should pass generated access token
         })
     });
 });

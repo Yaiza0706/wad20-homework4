@@ -1,7 +1,8 @@
 const UserModel = require('../models/UserModel');
+const JWT = require('../library/jwt');
 
 module.exports = (request, response, next) => {
-
+    
     // This is the place where you will need to implement authorization
     /*
         Pass access token in the Authorization header and verify
@@ -10,7 +11,11 @@ module.exports = (request, response, next) => {
     */
 
     if (request.headers.authorization) {
-        UserModel.getById(1, (user) => {
+
+        token = request.headers.authorization.replace("Bearer ","")
+        decoded = JWT.verifyAccessToken(token)
+        console.log(token)
+        UserModel.getById(decoded.id, (user) => {
             request.currentUser = user;
             next();
         });

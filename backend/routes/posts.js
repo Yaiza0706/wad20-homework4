@@ -31,10 +31,24 @@ router.post('/', authorize,  (request, response) => {
 
 router.put('/:postId/likes', authorize, (request, response) => {
 
+    let postId = request.params.postId;
+    let userId = request.currentUser.id;
+
+    PostModel.like(userId, postId, (updatedPost) => {
+        response.status(200).json(updatedPost)
+    });
+
     // Endpoint for current user to like a post
 });
 
 router.delete('/:postId/likes', authorize, (request, response) => {
+
+    let postId = request.params.postId;
+    let userId = request.currentUser.id;
+
+    PostModel.unlike(userId, postId, (updatedPost) => {
+        response.status(200).json(updatedPost)
+    });
 
     // Endpoint for current user to unlike a post
 

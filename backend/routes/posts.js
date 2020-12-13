@@ -55,8 +55,6 @@ router.post('/', authorize,  (request, response) => {
         response.status(201).json(addPost);
     });
 
-    // && request.body.media.type === undefined && request.body.media.url === undefined
-
 });
 
 

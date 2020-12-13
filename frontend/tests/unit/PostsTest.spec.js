@@ -98,9 +98,23 @@ jest.mock("axios", () => ({
 
 describe('Posts', () => {
 
-    const wrapper = mount(Posts, {router, store, localVue});
-
-    it('1 == 1', function () {
-        expect(true).toBe(true)
+    const wrapper = mount(Posts, { router, store, localVue });
+    
+    it('renders the correct amount of posts', function () {
+        const posts = wrapper.findAll('.post');
+        expect(posts.length).toEqual(testData.length);
+  
     });
+    it('image or video tags are rendered depending on mediatype', function () {
+        const postsMedia = wrapper.findAll('.post.media');
+        if (postsMedia.hasOwnProperty('media')) {
+            const postType = wrapper.findAll('.post.media.type');
+            expect(postType).toBe(testData.media.type);
+        }
+    });
+    it('post create time is displayed in correct format', function () {
+        const postsTimes = wrapper.findAll('.createTime');
+        expect(postsTimes.createTime).toBe(testData.createTime);
+    })
+
 });

@@ -25,6 +25,26 @@ router.get('/', authorize, (request, response) => {
 router.post('/', authorize,  (request, response) => {
 
     // Endpoint to create a new post
+   
+    // error handeling for the server not to crash
+    // if (request.body.text === null || request.body.text === undefined || request.body.text === ''){ 
+    //     response.status(400).json({
+    //         code: 'text_atribute_can_not_be_empty',
+    //         message: "'text' atribute can not be empty, plase specify 'text' atribute"
+    //     });
+    //     return;
+    // }
+    
+    let params = {
+        userId: request.currentUser.id,
+        text: request.body.text,
+        media: request.body.media,
+    };
+
+    PostModel.create(params, (addPost) => {
+        response.status(201).json(addPost);
+    });
+
 
 });
 

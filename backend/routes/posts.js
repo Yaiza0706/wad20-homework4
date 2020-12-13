@@ -26,14 +26,24 @@ router.post('/', authorize,  (request, response) => {
 
     // Endpoint to create a new post
    
-    // error handeling for the server not to crash
-    // if (request.body.text === null || request.body.text === undefined || request.body.text === ''){ 
-    //     response.status(400).json({
-    //         code: 'text_atribute_can_not_be_empty',
-    //         message: "'text' atribute can not be empty, plase specify 'text' atribute"
-    //     });
-    //     return;
-    // }
+    /* Some error handeling:
+        - post should have at least one atribute (media/text)
+        - if url is defined then media type can not be undefined 
+      Would be nice: 
+        - would check if url is valid
+        - would check if url media type is the same as media type defined by user
+    */
+    if ((request.body.text === null && request.body.media.url === null )
+    || (request.body.text === undefined && request.body.media.url === undefined)
+    || (request.body.text === '' && request.body.media.url === '')
+    || (request.body.media.url && request.body.media.type === undefined)){ 
+        response.status(400).json({
+            code: 'post_can_not_be_empty',
+            message: "Post can not be empty, plase specify at least one atribute"
+        });
+        console.log("Post can not be empty");
+        return;
+    }
     
     let params = {
         userId: request.currentUser.id,
@@ -45,6 +55,7 @@ router.post('/', authorize,  (request, response) => {
         response.status(201).json(addPost);
     });
 
+    // && request.body.media.type === undefined && request.body.media.url === undefined
 
 });
 
